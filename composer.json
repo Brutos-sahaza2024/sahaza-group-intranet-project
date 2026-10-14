@@ -1,0 +1,143 @@
+{
+    "name": "sahaza/sahaza-group-intranet-project",
+    "description": "Modèle de projet Composer pour installer la distribution Drupal Sahaza Group intranet en une seule commande.",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/sahaza_group_intranet",
+    "support": {
+        "source": "https://git.drupalcode.org/project/sahaza_group_intranet"
+    },
+    "repositories": {
+        "sahaza_group_intranet": {
+            "type": "vcs",
+            "url": "https://git.drupalcode.org/project/sahaza_group_intranet.git"
+        },
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "drupal-ckeditor-plugins": {
+            "type": "composer",
+            "url": "https://panopoly.gitlab.io/drupal-ckeditor-plugins"
+        },
+        "panopoly-libraries": {
+            "type": "composer",
+            "url": "https://panopoly.gitlab.io/panopoly-libraries"
+        },
+        "dropzone": {
+            "type": "package",
+            "package": {
+                "name": "enyo/dropzone",
+                "version": "5.7.2",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://registry.npmjs.org/dropzone/-/dropzone-5.7.2.tgz",
+                    "type": "tar",
+                    "shasum": "91bee1572dda515d40901da304bc79dddf309b4c"
+                }
+            }
+        }
+    },
+    "require": {
+        "composer/installers": "^2.3",
+        "drupal/core-composer-scaffold": "^10.5",
+        "drupal/core-project-message": "^10.5",
+        "drupal/core-recommended": "^10.5",
+        "drupal/graphql": "^4.14",
+        "drupal/sahaza_group_intranet": "1.0.x-dev",
+        "drush/drush": "^12.5 || ^13",
+        "enyo/dropzone": "5.7.2"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "platform": {
+            "php": "8.2.0"
+        },
+        "allow-plugins": {
+            "composer/installers": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "tbachert/spi": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "create-settings": "@php -r \"file_exists('web/sites/default/settings.php') || !file_exists('web/sites/default/default.settings.php') || copy('web/sites/default/default.settings.php', 'web/sites/default/settings.php');\"",
+        "post-install-cmd": [
+            "@create-settings"
+        ],
+        "post-update-cmd": [
+            "@create-settings"
+        ]
+    },
+    "extra": {
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "web/"
+            },
+            "file-mapping": {
+                "[web-root]/sites/default/default.settings.php": {
+                    "append": "assets/settings.sahaza.php"
+                }
+            }
+        },
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ]
+        },
+        "drupal-core-project-message": {
+            "include-keys": [
+                "homepage",
+                "support"
+            ],
+            "post-create-project-cmd-message": [
+                "<bg=blue;fg=white>                                                       </>",
+                "<bg=blue;fg=white>  Distribution Sahaza Group intranet téléchargée !     </>",
+                "<bg=blue;fg=white>                                                       </>",
+                "",
+                "<bg=yellow;fg=black>Étape suivante</> : installer le site (base de données requise) :",
+                "",
+                "  cd <dossier-du-projet>",
+                "  vendor/bin/drush site:install sahaza_group_intranet --existing-config \\",
+                "    --db-url=mysql://user:pass@localhost/intranet \\",
+                "    --account-name=admin --account-pass=CHANGEME -y",
+                "",
+                "  ou via le navigateur : /core/install.php",
+                "",
+                "  Documentation : web/profiles/contrib/sahaza_group_intranet/INSTALL.md"
+            ]
+        }
+    }
+}

@@ -1,0 +1,10 @@
+# Fichiers générés par Composer dans un projet créé à partir de ce modèle.
+/vendor/
+/web/core/
+/web/modules/contrib/
+/web/themes/contrib/
+/web/profiles/contrib/
+/web/libraries/
+/drush/Commands/contrib/
+/web/sites/*/settings*.php
+/web/sites/*/files/
