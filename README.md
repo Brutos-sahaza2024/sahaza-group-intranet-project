@@ -1,11 +1,20 @@
 # Modèle de projet — Sahaza Group intranet
 
-Ce dossier est un **modèle de projet Composer** (`"type": "project"`). Il permet
+Ce dépôt est un **modèle de projet Composer** (`"type": "project"`). Il permet
 d'obtenir un site Drupal complet, prêt à installer, en **une seule commande** :
 
 ```bash
 composer create-project sahaza/sahaza-group-intranet-project mon-intranet
 ```
+
+## Versions
+
+| Version du modèle | Branche | Drupal | PHP | Commande |
+|---|---|---|---|---|
+| **2.x** | `2.0.x` | 11 | 8.3+ | `composer create-project sahaza/sahaza-group-intranet-project mon-intranet "^2.0"` |
+| **1.x** | `1.0.x` | 10.5+ | 8.2+ | `composer create-project sahaza/sahaza-group-intranet-project mon-intranet "^1.0"` |
+
+Sans contrainte de version, Composer installe la dernière version stable.
 
 Ou en deux temps (comme `thunder/thunder-project`) — pratique pour ajuster le
 `composer.json` (version de Drupal, `platform.php`…) avant de télécharger quoi
@@ -21,10 +30,10 @@ composer install
 
 | Élément | Détail |
 |---------|--------|
-| Drupal core | `drupal/core-recommended ^10.5` (docroot `web/`) |
-| Distribution | `drupal/sahaza_group_intranet` (branche `1.0.x`) dans `web/profiles/contrib/` |
+| Drupal core | `drupal/core-recommended ^11` (docroot `web/`) |
+| Distribution | `drupal/sahaza_group_intranet` (branche `2.0.x`) dans `web/profiles/contrib/` |
 | Modules contrib | toutes les dépendances du profil, y compris celles en alpha/beta/rc/dev |
-| Drush | `drush/drush ^12.5 \|\| ^13` (`vendor/bin/drush`) |
+| Drush | `drush/drush ^13` (`vendor/bin/drush`) |
 | Dropzone 5.7.2 | dans `web/libraries/dropzone/` (requis par `dropzonejs`) |
 | `config_sync_directory` | ajouté à `default.settings.php` (chemin absolu vers `config/sync` du profil) |
 | `settings.php` | créé à partir de `default.settings.php` après chaque `composer install`/`update` s'il n'existe pas (requis par `drush site:install --existing-config`) |
@@ -33,23 +42,12 @@ Le modèle règle aussi, **à la racine**, ce qu'un profil ne peut pas imposer :
 `minimum-stability: dev` + `prefer-stable: true` et les dépôts Composer
 supplémentaires (CKEditor plugins, Panopoly libraries).
 
-`config.platform.php` est fixé à `8.2.0` : les dépendances sont résolues pour
-PHP 8.2 même si la commande est lancée avec PHP 8.3+, ce qui garantit que le
-code produit tourne sur tout serveur compatible Drupal 10.
+`config.platform.php` est fixé à `8.3.0` (minimum de Drupal 11) : les
+dépendances sont résolues pour PHP 8.3 même si la commande est lancée avec une
+version plus récente.
 
-`drupal/graphql` est contraint en `^4.14` (version de référence Drupal 10 du
-profil) : la 5.1 utilise `Drush\Formatters\FormatterTrait`, présent seulement
-dans Drush 13.7+ (PHP 8.3), et casse toute commande drush sous PHP 8.2.
-
-### Passer sur Drupal 11
-
-```bash
-composer config platform.php 8.3.0
-composer require drupal/core-recommended:^11 drupal/core-composer-scaffold:^11 \
-  drupal/core-project-message:^11 "drupal/graphql:^4.14 || ^5.0" -W
-```
-
-Voir le §8 de `INSTALL.md` du profil pour les points de vigilance.
+`symfony/runtime` est autorisé dans `allow-plugins` : c'est un plugin Composer
+requis par `drupal/core` 11.4+.
 
 ## Installer le site ensuite
 
@@ -65,7 +63,7 @@ Ou via le navigateur : `/core/install.php`.
 ## Publication du modèle
 
 Ce dépôt est publié sur [Packagist](https://packagist.org/packages/sahaza/sahaza-group-intranet-project) :
-chaque tag Git (`1.0.0`, `1.0.1`…) devient une version installable par
+chaque tag Git (`1.0.0`, `2.0.0`…) devient une version installable par
 `composer create-project`.
 
 Pour tester une modification avant de la publier :
@@ -78,7 +76,8 @@ composer create-project sahaza/sahaza-group-intranet-project mon-intranet \
 
 ## Maintenance
 
-- Dès qu'une release taguée du profil inclut la compatibilité actuelle, remplacer
-  `"drupal/sahaza_group_intranet": "1.0.x-dev"` par `"^1.0"`.
+- Dès qu'une release 2.x du profil est taguée, remplacer
+  `"drupal/sahaza_group_intranet": "2.0.x-dev"` par `"^2.0"`.
+- Les correctifs Drupal 10 se font sur la branche `1.0.x` (tags `1.0.*`).
 - Si le projet est publié sur `packages.drupal.org`, le dépôt `vcs`
   `sahaza_group_intranet` peut être retiré.
